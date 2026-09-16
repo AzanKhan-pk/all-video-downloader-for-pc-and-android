@@ -43,13 +43,14 @@ jobs:
 
       - name: Build Inno Setup installer
         shell: pwsh
+        working-directory: windows
         run: |
           $iscc = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
           if (!(Test-Path $iscc)) { choco install innosetup --no-progress -y }
           $iscc = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
-          & $iscc 'windows/setup.iss'
+          & $iscc 'setup.iss'
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          if (!(Test-Path 'windows/dist/VidLoom-Setup.exe')) { throw 'Installer was not produced.' }
+          if (!(Test-Path 'dist/VidLoom-Setup.exe')) { throw 'Installer was not produced.' }
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
