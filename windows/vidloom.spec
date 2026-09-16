@@ -5,8 +5,8 @@ from PyInstaller.utils.hooks import collect_data_files
 hiddenimports = ["webview.platforms.edgechromium", "webview.platforms.winforms"]
 
 analysis = Analysis(
-    ["windows/launcher.py"],
-    pathex=["."],
+    ["launcher.py"],
+    pathex=["windows"],
     binaries=[],
     datas=collect_data_files("webview"),
     hiddenimports=hiddenimports,
