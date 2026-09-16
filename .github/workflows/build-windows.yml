@@ -30,8 +30,8 @@ jobs:
       - name: Verify executable
         shell: pwsh
         run: |
-          if (!(Test-Path 'dist/VidLoom/VidLoom.exe')) { throw 'VidLoom.exe was not produced.' }
-          $size = (Get-Item 'dist/VidLoom/VidLoom.exe').Length
+          if (!(Test-Path 'dist/VidLoom.exe')) { throw 'VidLoom.exe was not produced.' }
+          $size = (Get-Item 'dist/VidLoom.exe').Length
           if ($size -lt 100000) { throw "VidLoom.exe looks invalid: $size bytes" }
           Write-Host "VidLoom.exe verified: $size bytes"
 
@@ -39,7 +39,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force windows/dist | Out-Null
-          Copy-Item 'dist/VidLoom/VidLoom.exe' 'windows/dist/VidLoom.exe' -Force
+          Copy-Item 'dist/VidLoom.exe' 'windows/dist/VidLoom.exe' -Force
 
       - name: Build Inno Setup installer
         shell: pwsh
