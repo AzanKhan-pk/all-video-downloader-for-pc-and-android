@@ -1,0 +1,45 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'android/**'
+      - '.github/workflows/build-android.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+
+      - name: Build release APK
+        working-directory: android
+        run: gradle --no-daemon assembleRelease
+
+      - name: Verify APK
+        shell: bash
+        run: |
+          test -s android/app/build/outputs/apk/release/app-release.apk
+          echo "APK size: $(stat -c%s android/app/build/outputs/apk/release/app-release.apk) bytes"
+
+      - name: Rename APK
+        run: cp android/app/build/outputs/apk/release/app-release.apk VidLoom.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: VidLoom-Android
+          path: VidLoom.apk
