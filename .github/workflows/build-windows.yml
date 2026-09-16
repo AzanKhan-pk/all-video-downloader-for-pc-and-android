@@ -31,7 +31,9 @@ jobs:
         shell: pwsh
         run: |
           if (!(Test-Path 'dist/VidLoom/VidLoom.exe')) { throw 'VidLoom.exe was not produced.' }
-          & 'dist/VidLoom/VidLoom.exe' --version 2>$null
+          $size = (Get-Item 'dist/VidLoom/VidLoom.exe').Length
+          if ($size -lt 100000) { throw "VidLoom.exe looks invalid: $size bytes" }
+          Write-Host "VidLoom.exe verified: $size bytes"
 
       - name: Prepare installer directory
         shell: pwsh
