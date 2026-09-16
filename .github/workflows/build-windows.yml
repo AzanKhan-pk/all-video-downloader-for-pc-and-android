@@ -1,0 +1,58 @@
+name: Build Windows App
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'windows/**'
+      - '.github/workflows/build-windows.yml'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller==6.16.0 -r windows/requirements.txt
+
+      - name: Build desktop executable
+        run: pyinstaller --clean --noconfirm windows/vidloom.spec
+
+      - name: Verify executable
+        shell: pwsh
+        run: |
+          if (!(Test-Path 'dist/VidLoom/VidLoom.exe')) { throw 'VidLoom.exe was not produced.' }
+          & 'dist/VidLoom/VidLoom.exe' --version 2>$null
+
+      - name: Prepare installer directory
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force windows/dist | Out-Null
+          Copy-Item 'dist/VidLoom/VidLoom.exe' 'windows/dist/VidLoom.exe' -Force
+
+      - name: Build Inno Setup installer
+        shell: pwsh
+        run: |
+          $iscc = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
+          if (!(Test-Path $iscc)) { choco install innosetup --no-progress -y }
+          $iscc = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
+          & $iscc 'windows/setup.iss'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if (!(Test-Path 'windows/dist/VidLoom-Setup.exe')) { throw 'Installer was not produced.' }
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: VidLoom-Windows
+          path: |
+            windows/dist/VidLoom.exe
+            windows/dist/VidLoom-Setup.exe
