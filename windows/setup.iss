@@ -1,11 +1,11 @@
 [Setup]
-AppId={{B9B4D1B0-1E72-4C5A-8C1B-VIDLOOM2026}}
+AppId={{B9B4D1B0-1E72-4C5A-8C1B-2026A1B2C3D4}
 AppName=VidLoom Video Downloader
 AppVersion=1.0.0
 AppPublisher=Azan Khan
 DefaultDirName={autopf}\VidLoom
 DefaultGroupName=VidLoom
-OutputDir=windows\dist
+OutputDir=dist
 OutputBaseFilename=VidLoom-Setup
 Compression=lzma2/ultra64
 SolidCompression=yes
@@ -15,7 +15,7 @@ PrivilegesRequired=lowest
 UninstallDisplayIcon={app}\VidLoom.exe
 
 [Files]
-Source: "windows\dist\VidLoom.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\VidLoom.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\VidLoom Video Downloader"; Filename: "{app}\VidLoom.exe"
