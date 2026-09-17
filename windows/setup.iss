@@ -5,24 +5,23 @@ AppVersion=1.0.0
 AppPublisher=Azan Khan
 DefaultDirName={autopf}\VidLoom
 DefaultGroupName=VidLoom
-OutputDir=dist
+OutputDir=windows\dist
 OutputBaseFilename=VidLoom-Setup
+SetupIconFile=windows\vidloom.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
 ArchitecturesInstallIn64BitMode=x64compatible
 PrivilegesRequired=lowest
 UninstallDisplayIcon={app}\VidLoom.exe
+DisableProgramGroupPage=yes
 
 [Files]
-Source: "dist\VidLoom.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "windows\dist\VidLoom.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\VidLoom Video Downloader"; Filename: "{app}\VidLoom.exe"
-Name: "{autodesktop}\VidLoom Video Downloader"; Filename: "{app}\VidLoom.exe"; Tasks: desktopicon
-
-[Tasks]
-Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional icons:"
+Name: "{group}\VidLoom Video Downloader"; Filename: "{app}\VidLoom.exe"; IconFilename: "{app}\VidLoom.exe"
+Name: "{autodesktop}\VidLoom Video Downloader"; Filename: "{app}\VidLoom.exe"; IconFilename: "{app}\VidLoom.exe"
 
 [Run]
 Filename: "{app}\VidLoom.exe"; Description: "Launch VidLoom Video Downloader"; Flags: nowait postinstall skipifsilent
