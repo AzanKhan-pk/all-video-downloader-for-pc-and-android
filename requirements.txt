@@ -1,4 +1,4 @@
 Flask>=3.0,<4
 requests>=2.31,<3
 gunicorn>=21,<24
-yt-dlp @ https://github.com/yt-dlp/yt-dlp/archive/refs/heads/master.zip
+yt-dlp[default]==2026.9.16.232951.dev0
