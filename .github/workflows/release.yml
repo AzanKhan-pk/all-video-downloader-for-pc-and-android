@@ -55,7 +55,7 @@ jobs:
       - name: Build installer
         shell: pwsh
         run: |
-          $iscc='C:Program Files (x86)Inno Setup 6ISCC.exe'
+          $iscc = 'C:/Program Files (x86)/Inno Setup 6/ISCC.exe'
           if (!(Test-Path $iscc)) { choco install innosetup --no-progress -y }
           & 'C:Program Files (x86)Inno Setup 6ISCC.exe' "$env:GITHUB_WORKSPACEwindowssetup.iss"
           if (!(Test-Path 'windows/dist/VidLoom-Setup.exe')) { throw 'Installer was not produced.' }
