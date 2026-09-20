@@ -1,0 +1,83 @@
+name: Build and Publish VidLoom Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - name: Build APK
+        working-directory: android
+        run: gradle --no-daemon assembleRelease
+      - name: Verify APK
+        run: test -s android/app/build/outputs/apk/release/app-release.apk
+      - name: Prepare APK
+        run: cp android/app/build/outputs/apk/release/app-release.apk VidLoom.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-android
+          path: VidLoom.apk
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller==6.16.0 pillow==11.3.0 -r windows/requirements.txt
+      - name: Create icon
+        run: python windows/create_icon.py
+      - name: Build executable
+        run: pyinstaller --clean --noconfirm windows/vidloom.spec
+      - name: Prepare installer input
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force windows/dist | Out-Null
+          Copy-Item 'dist/VidLoom.exe' 'windows/dist/VidLoom.exe' -Force
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $iscc='C:Program Files (x86)Inno Setup 6ISCC.exe'
+          if (!(Test-Path $iscc)) { choco install innosetup --no-progress -y }
+          & 'C:Program Files (x86)Inno Setup 6ISCC.exe' "$env:GITHUB_WORKSPACEwindowssetup.iss"
+          if (!(Test-Path 'windows/dist/VidLoom-Setup.exe')) { throw 'Installer was not produced.' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-windows
+          path: windows/dist/VidLoom-Setup.exe
+
+  publish:
+    needs: [android, windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          merge-multiple: true
+      - name: Publish latest release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.1.${{ github.run_number }}
+          name: VidLoom v1.1.${{ github.run_number }}
+          generate_release_notes: true
+          files: |
+            VidLoom.apk
+            VidLoom-Setup.exe
