@@ -25,7 +25,7 @@ exe = EXE(
     analysis.datas,
     [],
     name="VidLoom",
-    icon="windows/vidloom.ico",
+    icon="vidloom.ico",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
