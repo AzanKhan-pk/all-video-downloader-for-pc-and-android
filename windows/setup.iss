@@ -1,7 +1,7 @@
 [Setup]
 AppId={{B9B4D1B0-1E72-4C5A-8C1B-2026A1B2C3D4}}
 AppName=VidLoom Video Downloader
-AppVersion=1.0.0
+AppVersion=1.1.0
 AppPublisher=Azan Khan
 DefaultDirName={autopf}\VidLoom
 DefaultGroupName=VidLoom
