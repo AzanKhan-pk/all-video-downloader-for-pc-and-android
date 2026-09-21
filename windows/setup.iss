@@ -5,9 +5,9 @@ AppVersion=1.1.0
 AppPublisher=Azan Khan
 DefaultDirName={autopf}\VidLoom
 DefaultGroupName=VidLoom
-OutputDir=windows\dist
+OutputDir=dist
 OutputBaseFilename=VidLoom-Setup
-SetupIconFile=windows\vidloom.ico
+SetupIconFile=vidloom.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
@@ -17,7 +17,7 @@ UninstallDisplayIcon={app}\VidLoom.exe
 DisableProgramGroupPage=yes
 
 [Files]
-Source: "windows\dist\VidLoom.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\VidLoom.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\VidLoom Video Downloader"; Filename: "{app}\VidLoom.exe"; IconFilename: "{app}\VidLoom.exe"
